@@ -1,5 +1,4 @@
 #pragma once
-#pragma once
 #include<SFML/Graphics.hpp>
 #include<SFML/Audio.hpp>
 #include <stack>
@@ -21,6 +20,9 @@ public:
 	void add_card(cards* c) {
 		c->set_position(xpos, ypos);
 		f.push(c);
+	}
+	cards* get_top_card() {
+		return f.top();
 	}
 	void draw(RenderWindow& window) {
 		f.top()->draw(window);
