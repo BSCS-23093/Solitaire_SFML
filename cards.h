@@ -48,6 +48,9 @@ public:
 	char get_value() {
 		return value;
 	}
+	string get_color() {
+		return color;
+	}
 	string get_suit() {
 		return suit;
 	}
@@ -63,18 +66,24 @@ public:
 	void set_flipped(bool flipped) {
 		this->flipped = true;
 	}
+	int get_position_x() {
+		return card_sprite_bg.getPosition().x;
+	}
+	int get_position_y() {
+		return card_sprite_bg.getPosition().y;
+	}
 	//
 	bool operator==(const cards& c) const {
-		return (value == c.value && suit == c.suit);
+		return (value == c.value && suit == c.suit && color==c.color);
 	}
 	bool operator!=(const cards& c) const {
 		return !operator==(c);
 	}
 	bool operator<(const cards& c) const {
-		return value < c.value;
+		return (value < c.value && suit != c.suit && color != c.color);
 	}
 	bool operator>(const cards& c)const {
-		return !operator<(c);
+		return (value > c.value && suit != c.suit && color != c.color);
 	}
 	//
 	void load(string address) {
@@ -98,6 +107,12 @@ public:
 			return card_sprite_bg;
 		else
 			return card_sprite_fg;
+	}
+	Texture get_texture() {
+		if (!flipped)
+			return card_texture_bg;
+		else
+			return card_texture_fg;
 	}
 	void draw(RenderWindow& window) {
 		if (!flipped)
