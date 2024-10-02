@@ -6,7 +6,54 @@
 #include <string>
 #include <vector>
 //using namespace sf;
-
+void reform_selector(foundation& t1, foundation& t2, foundation& t3, foundation& t4, foundation& t5, foundation& t6, foundation& t7, int& foundation_selector) {
+    if (foundation_selector == 1) {
+        t1.reform();
+    }
+    else if (foundation_selector == 2) {
+        t2.reform();
+    }
+    else if (foundation_selector == 3) {
+        t3.reform();
+    }
+    else if (foundation_selector == 4) {
+        t4.reform();
+    }
+	else if (foundation_selector == 5) {
+		t5.reform();
+	}
+	else if (foundation_selector == 6) {
+		t6.reform();
+	}
+    else if (foundation_selector == 7) {
+        t7.reform();
+    }
+	//foundation_selector = 0;
+}
+void cardReversal(foundation& t1, foundation& t2, foundation& t3, foundation& t4, foundation& t5, foundation& t6, foundation& t7, int& foundation_selector,cards* temp) {
+    if (foundation_selector == 1) {
+        t1.add_card_flipped(temp);
+    }
+    else if (foundation_selector == 2) {
+		t2.add_card_flipped(temp);
+    }
+    else if (foundation_selector == 3) {
+		t3.add_card_flipped(temp);
+    }
+    else if (foundation_selector == 4) {
+		t4.add_card_flipped(temp);
+    }
+    else if (foundation_selector == 5) {
+		t5.add_card_flipped(temp);
+    }
+    else if (foundation_selector == 6) {
+		t6.add_card_flipped(temp);
+    }
+    else if (foundation_selector == 7) {
+		t7.add_card_flipped(temp);
+    }
+    //foundation_selector = 0;
+}
 int main()
 {
     sf::RenderWindow window(sf::VideoMode(2560, 1320), "Solitaire SFML", sf::Style::Close | sf::Style::Resize);
@@ -26,7 +73,6 @@ int main()
         music.setLoop(true);
         music.play();
     }
-
     ///////////////////////////////////////////////////////////////////////////
     card_deck de;
     //srand(time(0));
@@ -103,6 +149,14 @@ int main()
     tableau d2("Diamonds", 2300, 410);
     tableau d3("Aces", 2300, 680);
     tableau d4("Spades", 2300, 950);
+	cards* c = new cards(13, "Hearts", "textures/empty.png", "red");
+	foundation d;
+    int foundation_selector = 0;
+	//d1.add_card(c);
+	//d2.add_card(c);
+	//d3.add_card(c);
+	//d4.add_card(c);
+
     //
     /*
     a = "textures/heart/10_heart.png";
@@ -141,8 +195,13 @@ int main()
     Sprite Card(B);
     Card.setPosition(100, 50);
     */
-    Sprite Card;
     Texture C;
+    C.loadFromFile("textures/ace/1_ace.png");
+    Sprite Card;
+    Card.setTexture(C);
+    int cardx = 100;
+    int cardy = 50;
+    Card.setPosition(cardx, cardy);
     //
     //C.loadFromFile("textures/backside.png");
     //Sprite Card2(C);
@@ -173,6 +232,14 @@ int main()
     //
     while (window.isOpen())
     {
+        if (mode == 3) {
+            if (d1.get_top_card()->get_value() == 13 && d2.get_top_card()->get_value() == 13 && d3.get_top_card()->get_value() == 13 && d4.get_top_card()->get_value() == 13)
+            {
+                cout << "You win!" << endl;
+                window.close();
+            }
+        }
+        //
         //clock with how much time has passed hh:min:sec format
         time = clock.getElapsedTime();
         int seconds = time.asSeconds();
@@ -187,7 +254,7 @@ int main()
             minutes = 0;
         if (hours == 24)
             hours = 0;
-        cout << hours << ":" << minutes << ":" << seconds << endl;
+        //cout << hours << ":" << minutes << ":" << seconds << endl;
         std::string hours_str = std::to_string(hours);
         if (hours < 10)
             hours_str.insert(0, "0");
@@ -276,23 +343,187 @@ int main()
                         mode = 3;
                         time = clock.restart();
                     }
+                    sf::Vector2i mp = sf::Mouse::getPosition(window);
+					if (mode == 3){
+						if (mp.x > 100 && mp.x < 250 && mp.y > 140 && mp.y < 370)
+						{
+							de.remove_card_last();
+						}
+					}
                     // Check if the mouse click is inside the sprite
                     sf::Vector2i mousePosition = sf::Mouse::getPosition(window);
-                    if (Card.getGlobalBounds().contains(static_cast<float>(mousePosition.x), static_cast<float>(mousePosition.y)))
+                    //if(t2.get_top_sprite().getGlobalBounds().contains(static_cast<float>(mousePosition.x), static_cast<float>(mousePosition.y)))
+                    //if (Card.getGlobalBounds().contains(static_cast<float>(mousePosition.x), static_cast<float>(mousePosition.y)))
+                    if (mousePosition.x > 400 && mousePosition.x < 548 && mousePosition.y>140 && mousePosition.y < 450)
                     {
                         isSpriteSelected = true;
+                        foundation_selector = 1;
+                        if (t1.get_top_card() != nullptr) {
+                            d.add_card_flipped(t1.get_top_card());
+                        }
+                        t1.remove_card();
                     }
+                    if(mousePosition.x>650 && mousePosition.x<798 && mousePosition.y>140 && mousePosition.y < 450)
+                    {
+                        isSpriteSelected = true;
+						foundation_selector = 2;
+                        if (t2.get_top_card() != nullptr) {
+                            d.add_card_flipped(t2.get_top_card());
+                        }
+                        t2.remove_card();
+					}
+					else if (mousePosition.x > 900 && mousePosition.x < 1048 && mousePosition.y>140 && mousePosition.y < 450)
+					{
+						isSpriteSelected = true;
+						foundation_selector = 3;
+						if (t3.get_top_card() != nullptr) {
+							d.add_card_flipped(t3.get_top_card());
+						}
+						t3.remove_card();
+					}
+					else if (mousePosition.x > 1150 && mousePosition.x < 1298 && mousePosition.y>140 && mousePosition.y < 450)
+					{
+						isSpriteSelected = true;
+						foundation_selector = 4;
+						if (t4.get_top_card() != nullptr) {
+							d.add_card_flipped(t4.get_top_card());
+						}
+						t4.remove_card();
+					}
+					else if (mousePosition.x > 1400 && mousePosition.x < 1548 && mousePosition.y>140 && mousePosition.y < 450)
+					{
+						isSpriteSelected = true;
+						foundation_selector = 5;
+						if (t5.get_top_card() != nullptr) {
+							d.add_card_flipped(t5.get_top_card());
+						}
+						t5.remove_card();
+					}
+					else if (mousePosition.x > 1650 && mousePosition.x < 1798 && mousePosition.y>140 && mousePosition.y < 450)
+					{
+						isSpriteSelected = true;
+						foundation_selector = 6;
+						if (t6.get_top_card() != nullptr) {
+							d.add_card_flipped(t6.get_top_card());
+						}
+						t6.remove_card();
+					}
+					else if (mousePosition.x > 1900 && mousePosition.x < 2048 && mousePosition.y>140 && mousePosition.y < 450)
+					{
+						isSpriteSelected = true;
+						foundation_selector = 7;
+						if (t7.get_top_card() != nullptr) {
+							d.add_card_flipped(t7.get_top_card());
+						}
+						t7.remove_card();
+					}
+
                 }
                 else if (evnt.mouseButton.button == sf::Mouse::Right)
                 {
                     deagCard = true;
                 }
             }
+			if (evnt.type == sf::Event::KeyPressed)
+			{
+				if (evnt.key.code == sf::Keyboard::Space)
+				{
+                   // d4.add_card(c);
+					moves--;
+					score--;
+				}
+			}
+
             if (evnt.type == sf::Event::MouseButtonReleased)
             {
+                sf::Vector2i mousePosition = sf::Mouse::getPosition(window);
                 if (evnt.mouseButton.button == sf::Mouse::Left)
                 {
-                    isSpriteSelected = false;
+					isSpriteSelected = false;
+                    if (d.get_top_card() != nullptr) {
+                        if (mousePosition.x > 400 && mousePosition.x < 548 && mousePosition.y>140 && mousePosition.y < 450 && (t1.move_valid(d.get_top_card()))) {
+                            //if (t3.move_valid(d.get_top_card())) {
+                                //if (d.get_top_card() != nullptr) {
+                            t1.add_card_flipped(d.get_top_card());
+                            //t2.reform();
+                            reform_selector(t1, t2, t3, t4, t5, t6, t7, foundation_selector);
+                            d.remove_card();
+                            //}
+                        //}
+                        }
+                        if (mousePosition.x > 900 && mousePosition.x < 1048 && mousePosition.y>140 && mousePosition.y < 450 && (t3.move_valid(d.get_top_card()))) {
+                            //if (t3.move_valid(d.get_top_card())) {
+                                //if (d.get_top_card() != nullptr) {
+                                t3.add_card_flipped(d.get_top_card());
+                                //t2.reform();
+                                reform_selector(t1, t2, t3, t4, t5, t6, t7, foundation_selector);
+                                d.remove_card();
+                                //}
+                            //}
+                        }
+                        else if (mousePosition.x > 1150 && mousePosition.x < 1298 && mousePosition.y>140 && mousePosition.y < 450 && (t4.move_valid(d.get_top_card()))) {
+                            //if (d.get_top_card() != nullptr) {
+                                t4.add_card_flipped(d.get_top_card());
+                                //t2.reform();
+                                reform_selector(t1, t2, t3, t4, t5, t6, t7, foundation_selector);
+                                d.remove_card();
+                            //}
+                        }
+                        else if (mousePosition.x > 1400 && mousePosition.x < 1548 && mousePosition.y>140 && mousePosition.y < 450 && (t5.move_valid(d.get_top_card()))) {
+                            //if (d.get_top_card() != nullptr) {
+                                t5.add_card_flipped(d.get_top_card());
+                                //t2.reform();
+                                reform_selector(t1, t2, t3, t4, t5, t6, t7, foundation_selector);
+                                d.remove_card();
+                            //}
+                        }
+                        else if (mousePosition.x > 1650 && mousePosition.x < 1798 && mousePosition.y>140 && mousePosition.y < 450 && (t6.move_valid(d.get_top_card()))) {
+                            //if (d.get_top_card() != nullptr) {
+                                t6.add_card_flipped(d.get_top_card());
+                                //t2.reform();
+                                reform_selector(t1, t2, t3, t4, t5, t6, t7, foundation_selector);
+                                d.remove_card();
+                            //}
+                        }
+                        else if (mousePosition.x > 1900 && mousePosition.x < 2048 && mousePosition.y>140 && mousePosition.y < 450 && (t7.move_valid(d.get_top_card()))) {
+                            //if (d.get_top_card() != nullptr) {
+                                t7.add_card_flipped(d.get_top_card());
+                                //t2.reform();
+                                reform_selector(t1, t2, t3, t4, t5, t6, t7, foundation_selector);
+                                d.remove_card();
+                            //}
+                        }
+                        else if (mousePosition.x > 650 && mousePosition.x < 798 && mousePosition.y>140 && mousePosition.y < 450 && (t2.move_valid(d.get_top_card()))) {
+                            //if (d.get_top_card() != nullptr) {
+                                t2.add_card_flipped(d.get_top_card());
+                                //t2.reform();
+                                reform_selector(t1, t2, t3, t4, t5, t6, t7, foundation_selector);
+                                d.remove_card();
+                            //}
+                        }
+                        else {
+                            //t2.add_card_flipped(d.get_top_card());
+                            cards* temp = d.get_top_card();
+                            if (temp != nullptr) {
+                                cardReversal(t1, t2, t3, t4, t5, t6, t7, foundation_selector, temp);
+                                //t2.add_card_flipped(temp);
+                            }
+                            d.remove_card();
+                        }
+                    //
+                    }
+                    /*
+                    else {
+						//t2.add_card_flipped(d.get_top_card());
+						cards* temp = d.get_top_card();
+                        if (temp != nullptr) {
+                            cardReversal(t1, t2, t3, t4, t5, t6, t7, foundation_selector,temp);
+                            //t2.add_card_flipped(temp);
+                        }
+                        d.remove_card();
+                    }
+                    */
+                    foundation_selector = 0;
                 }
             }
         }
@@ -300,14 +531,16 @@ int main()
         if (isSpriteSelected)
         {
             sf::Vector2i mousePosition = sf::Mouse::getPosition(window);
-            Card.setPosition(static_cast<float>(mousePosition.x) - 50, static_cast<float>(mousePosition.y) - 65);
-        }
+            d.set_position(static_cast<float>(mousePosition.x) - 50, static_cast<float>(mousePosition.y) - 65);
+		}
         if (deagCard)
         {
             sf::Vector2f position = Card.getPosition();
             position.x += 5;
-            Card.setPosition(position);
-            if (position.x >= max_x)
+            //Card.setPosition(position);
+			
+            //t2.get_top_card()->set_position(position.x,position.y);
+			if (position.x >= max_x)
                 deagCard = false;
         }
         window.clear();
@@ -335,6 +568,8 @@ int main()
             d2.draw(window);
             d3.draw(window);
             d4.draw(window);
+			d.draw(window);
+            //window.draw(Card);
             //d.display(window);
             //c.draw(window);
         }
