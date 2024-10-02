@@ -3,20 +3,21 @@
 #include<SFML/Audio.hpp>
 #include <vector>
 #include <stack>
+#include <queue>
 //#include "cards.h" // Ensure cards.h is included
 using namespace std;
 using namespace sf;
 
 class foundation {
 private:
-	stack<cards*> flipped;
-	stack<cards*> unflipped;
-	stack<cards*> temp_flipped;
-	stack<cards*> temp_unflipped;
-	int xpos=0;
-	int ypos=0;
-	int xpos2=0;
-	int ypos2=0;
+	vector<cards*> flipped;
+	vector<cards*> unflipped;
+	vector<cards*> temp_flipped;
+	vector<cards*> temp_unflipped;
+	int xpos = 0;
+	int ypos = 0;
+	int xpos2 = 0;
+	int ypos2 = 0;
 public:
 	foundation() {
 
@@ -26,20 +27,96 @@ public:
 		ypos = y;
 	}
 	void add_card_unflipped(cards* c) {
-		unflipped.push(c);
+		unflipped.push_back(c);
 	}
 	void add_card_flipped(cards* c) {
-		flipped.push(c);
-		flipped.top()->set_flipped(true);
+		flipped.push_back(c);
+		flipped.front()->set_flipped(true);
+	}
+	/*
+	void remove_card() {
+		if (!flipped.empty()) {
+			flipped.pop_back();
+		}
+	}
+	*/
+	void remove_card() {
+		if (!flipped.empty()) {
+			flipped.erase(flipped.end()-1);
+		}
+	}
+	cards* get_top_card() {
+		if (flipped.empty())
+			return nullptr;
+		else {
+			//return flipped.front();
+			return flipped.back();
+		}
+	}
+	cards* remove_last_card() {
+		if (!flipped.empty()) {
+			cards* temp = flipped.front();
+		    flipped.pop_back();
+			return temp;
+		}
+		else {
+			return nullptr;
+		}
+	}
+	Sprite get_top_sprite() {
+		if (!flipped.empty())
+		return flipped.front()->get_sprite();
+	}
+	bool move_valid(cards* c) {
+		if (flipped.empty()) {
+			if (c->get_value() == 13) {
+				return true;
+			}
+			else {
+				return false;
+			}
+		}
+		else {
+			//if (c->get_value() == flipped.back()-1->get_value() && c->get_color() != flipped.back()->get_color()) {
+			if (c->get_value() < flipped.back()->get_value() && c->get_color() != flipped.back()->get_color()) {
+			return true;
+			}
+			else {
+				return false;
+			}
+		}
+	}
+	void reform() {
+		if (!unflipped.empty() && flipped.empty()) {
+			flipped.push_back(unflipped.back());
+			unflipped.pop_back();
+			flipped.front()->set_flipped(true);
+		}
 	}
 	void draw(RenderWindow& window) {
 		xpos2 = xpos;
 		ypos2 = ypos;
+		if (!unflipped.empty()) {
+			for (int i = 0; i < unflipped.size(); i++) {
+				unflipped[i]->set_position(xpos2, ypos2);
+				unflipped[i]->draw(window);
+				ypos2 += 40;
+			}
+		}
+		if (!flipped.empty()) {
+			for (int i = 0; i < flipped.size(); i++) {
+				flipped[i]->set_position(xpos2, ypos2);
+				flipped[i]->draw(window);
+				ypos2 += 40;
+			}
+		}
+
+		/*
 		while (!unflipped.empty()) {
-			unflipped.top()->set_position(xpos2, ypos2);
-			unflipped.top()->draw(window);
-			temp_unflipped.push(unflipped.top());
-			unflipped.pop();
+			unflipped.front()->set_position(xpos2, ypos2);
+			unflipped.front()->draw(window);
+			temp_unflipped.push_back(unflipped.front());
+			unflipped.pop_back();
 			ypos2 += 40;
 		}
 		while (!flipped.empty()) {
@@ -57,6 +134,7 @@ public:
 			flipped.push(temp_flipped.top());
 			temp_flipped.pop();
 		}
+		*/
 	}
 
 };
