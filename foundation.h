@@ -29,9 +29,16 @@ public:
 	void add_card_unflipped(cards* c) {
 		unflipped.push_back(c);
 	}
+	void clear() {
+		flipped.clear();
+		unflipped.clear();
+	}
 	void add_card_flipped(cards* c) {
 		flipped.push_back(c);
 		flipped.front()->set_flipped(true);
+	}
+	int get_size() {
+		return flipped.size();
 	}
 	/*
 	void remove_card() {
@@ -42,12 +49,13 @@ public:
 	*/
 	void remove_card() {
 		if (!flipped.empty()) {
-			flipped.erase(flipped.end()-1);
+			flipped.erase(flipped.end() - 1);
 		}
 	}
 	cards* get_top_card() {
-		if (flipped.empty())
+		if (flipped.empty()) {
 			return nullptr;
+		}
 		else {
 			//return flipped.front();
 			return flipped.back();
@@ -56,7 +64,7 @@ public:
 	cards* remove_last_card() {
 		if (!flipped.empty()) {
 			cards* temp = flipped.front();
-		    flipped.pop_back();
+			flipped.pop_back();
 			return temp;
 		}
 		else {
@@ -65,7 +73,7 @@ public:
 	}
 	Sprite get_top_sprite() {
 		if (!flipped.empty())
-		return flipped.front()->get_sprite();
+			return flipped.front()->get_sprite();
 	}
 	bool move_valid(cards* c) {
 		if (flipped.empty()) {
@@ -79,7 +87,7 @@ public:
 		else {
 			//if (c->get_value() == flipped.back()-1->get_value() && c->get_color() != flipped.back()->get_color()) {
 			if (c->get_value() < flipped.back()->get_value() && c->get_color() != flipped.back()->get_color()) {
-			return true;
+				return true;
 			}
 			else {
 				return false;
