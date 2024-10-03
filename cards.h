@@ -16,34 +16,34 @@ private:
 	Texture card_texture_fg;
 	Sprite card_sprite_fg;
 public:
-	cards(int value, string suit,string path,string color) {
+	cards(int value, string suit, string path, string color) {
 		this->value = value;
 		this->suit = suit;
 		this->color = color;
 		this->Path = path;
 		card_texture_bg.loadFromFile("textures/backside.png");
 		card_sprite_bg.setTexture(card_texture_bg);
-		
+
 		load(path);
 		set_sprite();
 	}
 	/*
-    void display(RenderWindow& window) {
-        if (flipped) {
-            draw(window); // Corrected the call to the draw method with the required argument
-        } else {
-            if (value == 1)
-                cout << "A" << suit << " ";
-            else if (value == 11)
-                cout << "J" << suit << " ";
-            else if (value == 12)
-                cout << "Q" << suit << " ";
-            else if (value == 13)
-                cout << "K" << suit << " ";
-            else if (value > 1 && value < 11)
-                cout << value + 0 << suit << " ";
-        }
-    }
+	void display(RenderWindow& window) {
+		if (flipped) {
+			draw(window); // Corrected the call to the draw method with the required argument
+		} else {
+			if (value == 1)
+				cout << "A" << suit << " ";
+			else if (value == 11)
+				cout << "J" << suit << " ";
+			else if (value == 12)
+				cout << "Q" << suit << " ";
+			else if (value == 13)
+				cout << "K" << suit << " ";
+			else if (value > 1 && value < 11)
+				cout << value + 0 << suit << " ";
+		}
+	}
 	*/
 	char get_value() {
 		return value;
@@ -64,7 +64,7 @@ public:
 		this->suit = suit;
 	}
 	void set_flipped(bool flipped) {
-		this->flipped = true;
+		this->flipped = flipped;
 	}
 	int get_position_x() {
 		return card_sprite_bg.getPosition().x;
@@ -74,7 +74,7 @@ public:
 	}
 	//
 	bool operator==(const cards& c) const {
-		return (value == c.value && suit == c.suit && color==c.color);
+		return (value == c.value && suit == c.suit && color == c.color);
 	}
 	bool operator!=(const cards& c) const {
 		return !operator==(c);
@@ -118,6 +118,6 @@ public:
 		if (!flipped)
 			window.draw(card_sprite_bg);
 		else
-		    window.draw(card_sprite_fg);
+			window.draw(card_sprite_fg);
 	}
 };
