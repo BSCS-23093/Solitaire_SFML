@@ -79,10 +79,17 @@ int main()
     }
     ///
     int x = 0;
+    int x2 = 0;
     ///
     ///////////////////////////////////////////////////////////////////////////
     card_deck de;
     drawPile p;
+	cards* t = new cards(0, "Empty", "textures/empty.png", "red");
+    t->set_flipped(true);
+	t->set_position(100, 440);
+	cards* td = new cards(0, "Empty", "textures/empty.png", "red");
+	td->set_flipped(true);
+	td->set_position(100, 140);
     //srand(time(0));
     de.shuffle();
     foundation t1, t2, t3, t4, t5, t6, t7;
@@ -232,7 +239,7 @@ int main()
     //
     Clock clock;
     Time time;
-    int moves = 10, score = 5;
+    int moves = 0, score = 0;
     //
     while (window.isOpen())
     {
@@ -431,27 +438,44 @@ int main()
                         }
                         t7.remove_card();
                     }
+                    //
                     if (mousePosition.x > 100 && mousePosition.x < 250 && mousePosition.y>140 && mousePosition.y < 350) {
-                        if (de.get_card() != nullptr && level == 1) {
+                        if (de.get_card2()==nullptr) {
+                            while(!p.empty()) {
+								//p.get_last_card()->set_flipped(true);
+								de.add_card_unflipped(p.get_last_card());
+						    	p.remove_card();
+                                score++;
+							}
+							//cout << p.get_size() << endl;
+                        }
+                         else if (de.get_card2() != nullptr && level == 1) {
                             p.add_card(de.get_card());
-                            de.remove_card_last();
+                            //de.remove_card_last();
+                            //de.get_size();
+							score++;
+							//cout <<p.get_size();
 						}
-						else if (de.get_card() != nullptr && level == 2) {
+						else if (de.get_card2() != nullptr && level == 2) {
                             for (int i = 0; i < 3; i++) {
-                                if (de.get_card() != nullptr) {
+                                if (de.get_card2() != nullptr) {
                                     p.add_card(de.get_card());
-                                    de.remove_card_last();
+                                    //de.remove_card_last();
                                 }
                             }
+                            score++;
+                            moves -= 10;
 						}
                     }
+                    //
                     if(mousePosition.x > 100 && mousePosition.x < 248 && mousePosition.y>400 && mousePosition.y < 600){
                         isSpriteSelected = true;
-						selector = 1;
+                        selector = 1;
                         if (p.get_last_card() != nullptr) {
 							d.add_card_flipped(p.get_last_card());
 						}
 						p.remove_card();
+                        x = 1;
                     }
                 }
                 /*
@@ -585,6 +609,11 @@ int main()
                             //t2.reform();
                             reform_selector(t1, t2, t3, t4, t5, t6, t7, foundation_selector);
                             d.remove_card();
+							score++;
+							if (x == 1) {
+                                moves += 10;
+								x = 0;
+							}
                             //}
                         //}
                         }
@@ -595,6 +624,11 @@ int main()
                             //t2.reform();
                             reform_selector(t1, t2, t3, t4, t5, t6, t7, foundation_selector);
                             d.remove_card();
+							score++;
+                            if (x == 1) {
+                                moves += 10;
+                                x = 0;
+                            }
                             //}
                         //}
                         }
@@ -604,6 +638,11 @@ int main()
                             //t2.reform();
                             reform_selector(t1, t2, t3, t4, t5, t6, t7, foundation_selector);
                             d.remove_card();
+							score++;
+                            if (x == 1) {
+                                moves += 10;
+                                x = 0;
+                            }
                             //}
                         }
                         else if (mousePosition.x > 1400 && mousePosition.x < 1548 && mousePosition.y>140 && mousePosition.y < 450 && (t5.move_valid(d.get_top_card()))) {
@@ -612,6 +651,11 @@ int main()
                             //t2.reform();
                             reform_selector(t1, t2, t3, t4, t5, t6, t7, foundation_selector);
                             d.remove_card();
+                            score++;
+                            if (x == 1) {
+                                moves += 10;
+                                x = 0;
+                            }
                             //}
                         }
                         else if (mousePosition.x > 1650 && mousePosition.x < 1798 && mousePosition.y>140 && mousePosition.y < 450 && (t6.move_valid(d.get_top_card()))) {
@@ -620,6 +664,11 @@ int main()
                             //t2.reform();
                             reform_selector(t1, t2, t3, t4, t5, t6, t7, foundation_selector);
                             d.remove_card();
+							score++;
+                            if (x == 1) {
+                                moves += 10;
+                                x = 0;
+                            }
                             //}
                         }
                         else if (mousePosition.x > 1900 && mousePosition.x < 2048 && mousePosition.y>140 && mousePosition.y < 450 && (t7.move_valid(d.get_top_card()))) {
@@ -628,6 +677,11 @@ int main()
                             //t2.reform();
                             reform_selector(t1, t2, t3, t4, t5, t6, t7, foundation_selector);
                             d.remove_card();
+							score++;
+                            if (x == 1) {
+                                moves += 10;
+                                x = 0;
+                            }
                             //}
                         }
                         else if (mousePosition.x > 650 && mousePosition.x < 798 && mousePosition.y>140 && mousePosition.y < 450 && (t2.move_valid(d.get_top_card()))) {
@@ -636,6 +690,11 @@ int main()
                             //t2.reform();
                             reform_selector(t1, t2, t3, t4, t5, t6, t7, foundation_selector);
                             d.remove_card();
+							score++;
+                            if (x == 1) {
+                                moves += 10;
+                                x = 0;
+                            }
                             //}
                         }
                         //
@@ -643,21 +702,29 @@ int main()
 							d1.add_card(d.get_top_card());
 							reform_selector(t1, t2, t3, t4, t5, t6, t7, foundation_selector);
 							d.remove_card();
+                            score++;
+                            moves += 10;
                         }
                         else if (mousePosition.x > 2300 && mousePosition.x < 2448 && mousePosition.y>410 && mousePosition.y < 590 && d2.check_valid_move(d.get_top_card())) {
 							d2.add_card(d.get_top_card());
 							reform_selector(t1, t2, t3, t4, t5, t6, t7, foundation_selector);
                             d.remove_card();
+							score++;
+                            moves += 10;
                         }
                         else if (mousePosition.x > 2300 && mousePosition.x < 2448 && mousePosition.y>680 && mousePosition.y < 860 && d3.check_valid_move(d.get_top_card())) {
                             d3.add_card(d.get_top_card());
                             reform_selector(t1, t2, t3, t4, t5, t6, t7, foundation_selector);
                             d.remove_card();
+							score++;
+							moves += 10;
                         }
 						else if (mousePosition.x > 2300 && mousePosition.x < 2448 && mousePosition.y>950 && mousePosition.y < 1130 && d4.check_valid_move(d.get_top_card())) {
 							d4.add_card(d.get_top_card());
 							reform_selector(t1, t2, t3, t4, t5, t6, t7, foundation_selector);
 							d.remove_card();
+							score++;
+							moves += 10;
 						}
                         //
                         else {
@@ -698,6 +765,7 @@ int main()
 								t1.add_card_flipped(d.get_top_card());
 								reform_selector(t1, t2, t3, t4, t5, t6, t7, foundation_selector);
 								d.remove_card();
+								score++;
 							}
                         }
                         else if (mousePositionRS.x > 650 && mousePositionRS.x < 798 && mousePositionRS.y>140 && mousePositionRS.y < 450 && (t2.move_valid(d.get_top_card()))) {        
@@ -705,6 +773,7 @@ int main()
                                 t2.add_card_flipped(d.get_top_card());
 								reform_selector(t1, t2, t3, t4, t5, t6, t7, foundation_selector);
                                 d.remove_card();
+								score++;
                             }
 						}
 						else if (mousePositionRS.x > 900 && mousePositionRS.x < 1048 && mousePositionRS.y>140 && mousePositionRS.y < 450 && (t3.move_valid(d.get_top_card()))) {
@@ -712,6 +781,7 @@ int main()
 								t3.add_card_flipped(d.get_top_card());
 								reform_selector(t1, t2, t3, t4, t5, t6, t7, foundation_selector);
 								d.remove_card();
+								score++;
 							}
 						}
 						else if (mousePositionRS.x > 1150 && mousePositionRS.x < 1298 && mousePositionRS.y>140 && mousePositionRS.y < 450 && (t4.move_valid(d.get_top_card()))) {
@@ -719,6 +789,7 @@ int main()
 								t4.add_card_flipped(d.get_top_card());
 								reform_selector(t1, t2, t3, t4, t5, t6, t7, foundation_selector);
 								d.remove_card();
+								score++;
 							}
 						}
 						else if (mousePositionRS.x > 1400 && mousePositionRS.x < 1548 && mousePositionRS.y>140 && mousePositionRS.y < 450 && (t5.move_valid(d.get_top_card()))) {
@@ -726,6 +797,7 @@ int main()
 								t5.add_card_flipped(d.get_top_card());
 								reform_selector(t1, t2, t3, t4, t5, t6, t7, foundation_selector);
 								d.remove_card();
+								score++;
 							}
 						}
 						else if (mousePositionRS.x > 1650 && mousePositionRS.x < 1798 && mousePositionRS.y>140 && mousePositionRS.y < 450 && (t6.move_valid(d.get_top_card()))) {
@@ -733,6 +805,7 @@ int main()
 								t6.add_card_flipped(d.get_top_card());
 								reform_selector(t1, t2, t3, t4, t5, t6, t7, foundation_selector);
 								d.remove_card();
+                                score++;
 							}
 						}
 						else if (mousePositionRS.x > 1900 && mousePositionRS.x < 2048 && mousePositionRS.y>140 && mousePositionRS.y < 450 && (t7.move_valid(d.get_top_card()))) {
@@ -740,6 +813,7 @@ int main()
 								t7.add_card_flipped(d.get_top_card());
 								reform_selector(t1, t2, t3, t4, t5, t6, t7, foundation_selector);
 								d.remove_card();
+								score++;
 							}
 						}
                         else {
@@ -798,6 +872,8 @@ int main()
             d2.draw(window);
             d3.draw(window);
             d4.draw(window);
+			td->draw(window);
+			t->draw(window);
             d.draw(window);
 			p.draw(window);
             //window.draw(Card);
