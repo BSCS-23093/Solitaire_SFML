@@ -13,21 +13,25 @@ private:
 	int ypos = 440;
 public:
 	drawPile() {
-		cards* c = new cards(0, "drawPile", "textures/empty.png", "black");
-		c->set_position(xpos, ypos);
-		c->set_flipped(true);
-		f.push_back(c);
+		//cards* c = new cards(0, "drawPile", "textures/empty.png", "black");
+		//c->set_position(xpos, ypos);
+		//c->set_flipped(true);
+		//f.push_back(c);
 	}
 	void add_card(cards* c) {
 		c->set_position(xpos, ypos);
 		c->set_flipped(true);
 		f.push_back(c);
 	}
+	int get_size() {
+		return f.size();
+	}
 	cards* get_top_card() {
 		if (f.empty())
 			return nullptr;
 		else
 		    return f.front();
+			//return (f.back());
 	}
 	cards* get_last_card() {
 		if (f.empty())
@@ -35,10 +39,14 @@ public:
 		else
 			return f.back();
 	}
+	bool empty() {
+		return f.empty();
+	}
 	void remove_card() {
 		if (!f.empty()) {
 			//f.erase(f.end()-1);
-			f.erase(f.end()-1);
+			//f.erase(f.end()-1);
+			f.pop_back();
 		}
 	}
 	void draw(RenderWindow& window) {
