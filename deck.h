@@ -93,9 +93,9 @@ public:
         }
         */
     }
-	bool is_empty() {
-		return deck.empty();
-	}
+    bool is_empty() {
+        return deck.empty();
+    }
     void shuffle() {
         srand(time(0));
         for (int i = 0; i < deck.size(); i++) {
@@ -116,38 +116,38 @@ public:
             deck[i]->draw(window);
         }
     }
-	void get_size() {
-		cout << deck.size() << endl;
-	}
+    void get_size() {
+        cout << deck.size() << endl;
+    }
     void add_card(cards* c) {
         deck.push_back(c);
     }
-	void add_card_unflipped(cards* c) {
+    void add_card_unflipped(cards* c) {
         c->set_flipped(false);
         deck.push_back(c);
-	}
+    }
     void remove_card_last() {
         //deck.pop_back();
     }
     void get_sprite(int i) {
         deck[i]->get_sprite();
     }
-	bool isEmpty() {
-		return deck.empty();
-	}
+    bool isEmpty() {
+        return deck.empty();
+    }
     cards* get_card() {
-		if (deck.empty())
-			return nullptr;
+        if (deck.empty())
+            return nullptr;
         cards* temp = deck.back();
         deck.pop_back();
         return temp;
     }
-	cards* get_card2() {
+    cards* get_card2() {
         if (deck.empty())
             return nullptr;
         cards* temp = deck.back();
         return temp;
-	}
+    }
     cards* operator[](int i) const {
         return deck[i];
     }
