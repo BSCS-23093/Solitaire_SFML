@@ -22,6 +22,37 @@ public:
 	foundation() {
 
 	}
+	void undo(foundation& s) {
+		if(!s.flipped.empty())
+		this->flipped = s.flipped;
+		if (!s.unflipped.empty())
+		this->unflipped = s.unflipped;
+		if (!s.temp_flipped.empty())
+		this->temp_flipped = s.temp_flipped;
+		if (!s.temp_unflipped.empty())
+		this->temp_unflipped = s.temp_unflipped;
+
+	}
+	bool undo_store(foundation& s) {
+		if (this->flipped == s.flipped)
+			return false;
+		if (this->unflipped == s.unflipped )
+			return false;
+		if (this->temp_flipped == s.temp_flipped)
+			return false;
+		if (this->temp_unflipped == s.temp_unflipped)
+			return false;
+		//
+		if(this->flipped!=s.flipped)
+		    this->flipped = s.flipped;
+		if (this->unflipped != s.unflipped)
+			this->unflipped = s.unflipped;
+		if (this->temp_flipped != s.temp_flipped)
+			this->temp_flipped = s.temp_flipped;
+		if (this->temp_unflipped != s.temp_unflipped)
+		    this->temp_unflipped = s.temp_unflipped;
+	return true;
+	}
 	void set_position(int x, int y) {
 		xpos = x;
 		ypos = y;
@@ -144,5 +175,22 @@ public:
 		}
 		*/
 	}
-
+	void draw2(RenderWindow& window) {
+		xpos2 = xpos;
+		ypos2 = ypos;
+		if (!unflipped.empty()) {
+			for (int i = unflipped.size() - 1; i>=0 ; i--) {
+				unflipped[i]->set_position(xpos2, ypos2);
+				unflipped[i]->draw(window);
+				ypos2 += 40;
+			}
+		}
+		if (!flipped.empty()) {
+			for (int i = flipped.size() - 1; i >= 0; i--) {
+				flipped[i]->set_position(xpos2, ypos2);
+				flipped[i]->draw(window);
+				ypos2 += 40;
+			}
+		}
+	}
 };
