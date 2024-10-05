@@ -8,6 +8,44 @@
 #include <string>
 #include <vector>
 
+//adding undo funtionality
+void undo(foundation& t1, foundation& t2, foundation& t3, foundation& t4, foundation& t5, foundation& t6, foundation& t7, foundation& d, drawPile& p, int& moves, int& score, stack<foundation>& undostack1, stack<foundation>& undostack2, stack<foundation>& undostack3, stack<foundation>& undostack4, stack<foundation>& undostack5, stack<foundation>& undostack6, stack<foundation>& undostack7) {
+    if (score > 0) {
+        score--;
+        moves -= 5;
+        if (!undostack1.empty()) {
+            t1.undo(undostack1.top());
+            undostack1.pop();
+        }
+        if (!undostack2.empty()) {
+            t2.undo(undostack2.top());
+            undostack2.pop();
+        }
+        if (!undostack3.empty()) {
+            t3.undo(undostack3.top());
+            undostack3.pop();
+        }
+        if (!undostack4.empty()) {
+            t4.undo(undostack4.top());
+            undostack4.pop();
+        }
+        if (!undostack5.empty()) {
+            t5.undo(undostack5.top());
+            undostack5.pop();
+        }
+        if (!undostack6.empty()) {
+            t6.undo(undostack6.top());
+            undostack6.pop();
+        }
+        if (!undostack7.empty()) {
+            t7.undo(undostack7.top());
+            undostack7.pop();
+        }
+    }
+}
+//adding redo functionality
+
+
 //using namespace sf;
 void reform_selector(foundation& t1, foundation& t2, foundation& t3, foundation& t4, foundation& t5, foundation& t6, foundation& t7, int& foundation_selector) {
     if (foundation_selector == 1) {
@@ -62,7 +100,7 @@ int main()
     sf::RenderWindow window(sf::VideoMode(2560, 1320), "Solitaire SFML", sf::Style::Close | sf::Style::Resize);
     window.setPosition(Vector2i(-10, 0));
     int mode = 0; // 0 = main menu, 1 = rules, 2 = difficulty selection, 3 = game
-	int level = 0; // 1 = easy, 2 = hard
+    int level = 0; // 1 = easy, 2 = hard
     sf::Music music;
     sf::Music musicTap;
     if (!music.openFromFile("textures/music/music_bg.ogg"))
@@ -81,16 +119,50 @@ int main()
     int x = 0;
     int x2 = 0;
     ///
+	stack<foundation> undoStack1;
+	stack<foundation> undoStack2;
+	stack<foundation> undoStack3;
+	stack<foundation> undoStack4;
+	stack<foundation> undoStack5;
+	stack<foundation> undoStack6;
+	stack<foundation> undoStack7;
+	stack<foundation> undoStackD;
+	stack<drawPile> undoStackP;
+	stack<int> undoStackM;
+	stack<int> undoStackS;
     ///////////////////////////////////////////////////////////////////////////
     card_deck de;
     drawPile p;
-	cards* t = new cards(0, "Empty", "textures/empty.png", "red");
+    cards* t = new cards(0, "Empty", "textures/empty.png", "red");
     t->set_flipped(true);
-	t->set_position(100, 440);
-	cards* td = new cards(0, "Empty", "textures/empty.png", "red");
-	td->set_flipped(true);
-	td->set_position(100, 140);
+    t->set_position(100, 440);
+    cards* td = new cards(0, "Empty", "textures/empty.png", "red");
+    td->set_flipped(true);
+    td->set_position(100, 140);
     //srand(time(0));
+    //
+    cards* a1 = new cards(0, "Empty", "textures/empty.png", "red");
+    a1->set_flipped(true);
+    a1->set_position(400, 140);
+    cards* a2 = new cards(0, "Empty", "textures/empty.png", "red");
+    a2->set_flipped(true);
+    a2->set_position(650, 140);
+    cards* a3 = new cards(0, "Empty", "textures/empty.png", "red");
+    a3->set_flipped(true);
+    a3->set_position(900, 140);
+    cards* a4 = new cards(0, "Empty", "textures/empty.png", "red");
+    a4->set_flipped(true);
+    a4->set_position(1150, 140);
+    cards* a5 = new cards(0, "Empty", "textures/empty.png", "red");
+    a5->set_flipped(true);
+    a5->set_position(1400, 140);
+    cards* a6 = new cards(0, "Empty", "textures/empty.png", "red");
+    a6->set_flipped(true);
+    a6->set_position(1650, 140);
+    cards* a7 = new cards(0, "Empty", "textures/empty.png", "red");
+    a7->set_flipped(true);
+    a7->set_position(1900, 140);
+    //
     de.shuffle();
     foundation t1, t2, t3, t4, t5, t6, t7;
     //add_tablues(de,t1,t2,t3,t4,t5,t6,t7);
@@ -160,14 +232,52 @@ int main()
     t7.set_position(1900, 140);
     de.remove_card_last();
     //
-    tableau d1("Hearts", 2300, 140,"red");
-    tableau d2("Diamonds", 2300, 410,"red");
-    tableau d3("Aces", 2300, 680,"black");
-    tableau d4("Spades", 2300, 950,"black");
-	foundation d;
-    int foundation_selector = 0;
-	int selector = 0;
+    //
+	undoStack1.push(t1);
+	undoStack2.push(t2);
+	undoStack3.push(t3);
+	undoStack4.push(t4);
+	undoStack5.push(t5);
+	undoStack6.push(t6);
+	undoStack7.push(t7);
+    //
 
+    tableau d1("Hearts", 2300, 140, "red");
+    tableau d2("Diamonds", 2300, 410, "red");
+    tableau d3("Aces", 2300, 680, "black");
+    tableau d4("Spades", 2300, 950, "black");
+    foundation d;
+    int foundation_selector = 0;
+    int selector = 0;
+	Texture A12;
+	A12.loadFromFile("textures/12.png");
+	Sprite CD;
+	CD.setTexture(A12);
+	CD.setPosition(2300, 720);
+	CD.scale(0.3, 0.3);
+    //
+    Texture A22;
+    A22.loadFromFile("textures/22.png");
+    Sprite CD2;
+    CD2.setTexture(A22);
+    CD2.setPosition(2300, 450);
+    CD2.scale(0.3, 0.3);
+    //
+    //
+    Texture A33;
+    A33.loadFromFile("textures/33.png");
+    Sprite CD3;
+    CD3.setTexture(A33);
+    CD3.setPosition(2300, 990);
+    CD3.scale(0.3, 0.3);
+    //
+    //
+    Texture A44;
+    A44.loadFromFile("textures/44.png");
+    Sprite CD4;
+    CD4.setTexture(A44);
+    CD4.setPosition(2300, 190);
+    CD4.scale(0.3, 0.3);
     //
     /*
     a = "textures/heart/10_heart.png";
@@ -247,9 +357,57 @@ int main()
             if (d1.get_top_card()->get_value() == 13 && d2.get_top_card()->get_value() == 13 && d3.get_top_card()->get_value() == 13 && d4.get_top_card()->get_value() == 13)
             {
                 cout << "You win!" << endl;
+                //sf::sleep(sf::seconds(5));
                 window.close();
+                main();
             }
         }
+        //
+        if (!undoStack1.empty() ) {
+            foundation ur1 = undoStack1.top();
+            if (ur1.undo_store(t1)) {
+                undoStack1.push(ur1);
+            }
+        }
+		if (!undoStack2.empty() ) {
+			foundation ur2 = undoStack2.top();
+			if (ur2.undo_store(t2)) {
+				undoStack2.push(ur2);
+			}
+		}
+        if (!undoStack3.empty() ) {
+            foundation ur3 = undoStack3.top();
+            if (ur3.undo_store(t3)) {
+                undoStack3.push(ur3);
+            }
+        }
+        if (!undoStack4.empty() ) {
+            foundation ur4 = undoStack4.top();
+            if (ur4.undo_store(t4)) {
+                undoStack4.push(ur4);
+            }
+        }
+        if (!undoStack5.empty() ) {
+            foundation ur5 = undoStack5.top();
+            if (ur5.undo_store(t5)) {
+                undoStack5.push(ur5);
+            }
+        }
+        if (!undoStack6.empty() ) {
+            foundation ur6 = undoStack6.top();
+            if (ur6.undo_store(t6)) {
+                undoStack6.push(ur6);
+            }
+        }
+        if (!undoStack7.empty()) {
+            foundation ur7 = undoStack7.top();
+            if (ur7.undo_store(t7)) {
+                undoStack7.push(ur7);
+            }
+        }
+
+
+
         //
         //clock with how much time has passed hh:min:sec format
         time = clock.getElapsedTime();
@@ -284,9 +442,9 @@ int main()
         //score and moves
         string moves_str = to_string(moves);
         string score_str = to_string(score);
-        if (moves < 10)
+        if (moves < 10 && moves >= 0)
             moves_str.insert(0, "0");
-        if (score < 10)
+        if (score < 10 && score >=0)
             score_str.insert(0, "0");
 
         Text movesText(moves_str, Lato, 80);
@@ -308,7 +466,7 @@ int main()
             /*
             if (de.isEmpty()) {
                 de.add_card(p.get_last_card());
-				//de.add_card(p.get_top_card());
+                //de.add_card(p.get_top_card());
                 p.remove_card();
             }
             */
@@ -352,7 +510,7 @@ int main()
                         Sprite Backg(A);
                         Backg.setPosition(0, -80);
                         mode = 3;
-						level = 1;
+                        level = 1;
                         time = clock.restart();
                     }
                     else if (mousePosition2.x > 568 && mousePosition2.x < 1436 && mousePosition2.y > 835 && mousePosition2.y < 1042 && mode == 2)
@@ -361,7 +519,7 @@ int main()
                         Sprite Backg(A);
                         Backg.setPosition(0, -80);
                         mode = 3;
-						level = 2;
+                        level = 2;
                         time = clock.restart();
                     }
                     sf::Vector2i mp = sf::Mouse::getPosition(window);
@@ -440,23 +598,23 @@ int main()
                     }
                     //
                     if (mousePosition.x > 100 && mousePosition.x < 250 && mousePosition.y>140 && mousePosition.y < 350) {
-                        if (de.get_card2()==nullptr) {
-                            while(!p.empty()) {
-								//p.get_last_card()->set_flipped(true);
-								de.add_card_unflipped(p.get_last_card());
-						    	p.remove_card();
+                        if (de.get_card2() == nullptr) {
+                            while (!p.empty()) {
+                                //p.get_last_card()->set_flipped(true);
+                                de.add_card_unflipped(p.get_last_card());
+                                p.remove_card();
                                 score++;
-							}
-							//cout << p.get_size() << endl;
+                            }
+                            //cout << p.get_size() << endl;
                         }
-                         else if (de.get_card2() != nullptr && level == 1) {
+                        else if (de.get_card2() != nullptr && level == 1) {
                             p.add_card(de.get_card());
                             //de.remove_card_last();
                             //de.get_size();
-							score++;
-							//cout <<p.get_size();
-						}
-						else if (de.get_card2() != nullptr && level == 2) {
+                            score++;
+                            //cout <<p.get_size();
+                        }
+                        else if (de.get_card2() != nullptr && level == 2) {
                             for (int i = 0; i < 3; i++) {
                                 if (de.get_card2() != nullptr) {
                                     p.add_card(de.get_card());
@@ -465,16 +623,16 @@ int main()
                             }
                             score++;
                             moves -= 10;
-						}
+                        }
                     }
                     //
-                    if(mousePosition.x > 100 && mousePosition.x < 248 && mousePosition.y>400 && mousePosition.y < 600){
+                    if (mousePosition.x > 100 && mousePosition.x < 248 && mousePosition.y>400 && mousePosition.y < 600) {
                         isSpriteSelected = true;
                         selector = 1;
                         if (p.get_last_card() != nullptr) {
-							d.add_card_flipped(p.get_last_card());
-						}
-						p.remove_card();
+                            d.add_card_flipped(p.get_last_card());
+                        }
+                        p.remove_card();
                         x = 1;
                     }
                 }
@@ -537,54 +695,54 @@ int main()
                         }
                         t4.remove_card();
                     }
-					else if (mousePositionR.x > 1400 && mousePositionR.x < 1548 && mousePositionR.y>140 && mousePositionR.y < 450)
-					{
-						isSpriteSelected = true;
-						foundation_selector = 5;
-						if (t2.get_top_card() != nullptr) {
-							while (t5.get_top_card() != nullptr) {
-								d.add_card_flipped(t5.get_top_card());
-								t5.remove_card();
-							}
-						}
-						t5.remove_card();
-					}
-					else if (mousePositionR.x > 1650 && mousePositionR.x < 1798 && mousePositionR.y>140 && mousePositionR.y < 450)
-					{
-						isSpriteSelected = true;
-						foundation_selector = 6;
-						if (t2.get_top_card() != nullptr) {
-							while (t6.get_top_card() != nullptr) {
-								d.add_card_flipped(t6.get_top_card());
-								t6.remove_card();
-							}
-						}
-						t6.remove_card();
-					}
-					else if (mousePositionR.x > 1900 && mousePositionR.x < 2048 && mousePositionR.y>140 && mousePositionR.y < 450)
-					{
-						isSpriteSelected = true;
-						foundation_selector = 7;
-						if (t2.get_top_card() != nullptr) {
-							while (t7.get_top_card() != nullptr) {
-								d.add_card_flipped(t7.get_top_card());
-								t7.remove_card();
-							}
-						}
-						t7.remove_card();
-					}
+                    else if (mousePositionR.x > 1400 && mousePositionR.x < 1548 && mousePositionR.y>140 && mousePositionR.y < 450)
+                    {
+                        isSpriteSelected = true;
+                        foundation_selector = 5;
+                        if (t2.get_top_card() != nullptr) {
+                            while (t5.get_top_card() != nullptr) {
+                                d.add_card_flipped(t5.get_top_card());
+                                t5.remove_card();
+                            }
+                        }
+                        t5.remove_card();
+                    }
+                    else if (mousePositionR.x > 1650 && mousePositionR.x < 1798 && mousePositionR.y>140 && mousePositionR.y < 450)
+                    {
+                        isSpriteSelected = true;
+                        foundation_selector = 6;
+                        if (t2.get_top_card() != nullptr) {
+                            while (t6.get_top_card() != nullptr) {
+                                d.add_card_flipped(t6.get_top_card());
+                                t6.remove_card();
+                            }
+                        }
+                        t6.remove_card();
+                    }
+                    else if (mousePositionR.x > 1900 && mousePositionR.x < 2048 && mousePositionR.y>140 && mousePositionR.y < 450)
+                    {
+                        isSpriteSelected = true;
+                        foundation_selector = 7;
+                        if (t2.get_top_card() != nullptr) {
+                            while (t7.get_top_card() != nullptr) {
+                                d.add_card_flipped(t7.get_top_card());
+                                t7.remove_card();
+                            }
+                        }
+                        t7.remove_card();
+                    }
                 }
             }
             if (evnt.type == sf::Event::KeyPressed)
             {
                 if (evnt.key.code == sf::Keyboard::Space)
                 {
-					cards* c = new cards(13, "Hearts", "textures/heart/1_heart.png", "red");
-					d1.add_card(c);
-					c = new cards(13, "Diamonds", "textures/diamond/1_diamond.png", "red");
-					d2.add_card(c);
-					c = new cards(13, "Aces", "textures/ace/1_ace.png", "black");
-					d3.add_card(c);
+                    cards* c = new cards(13, "Hearts", "textures/heart/1_heart.png", "red");
+                    d1.add_card(c);
+                    c = new cards(13, "Diamonds", "textures/diamond/1_diamond.png", "red");
+                    d2.add_card(c);
+                    c = new cards(13, "Aces", "textures/ace/1_ace.png", "black");
+                    d3.add_card(c);
                     c = new cards(13, "Spades", "textures/spade/1_spade.png", "black");
                     d4.add_card(c);
                     // Replace sleep(1) with sf::sleep(sf::seconds(1));
@@ -593,6 +751,10 @@ int main()
                     moves--;
                     score--;
                 }
+				if (evnt.key.code == sf::Keyboard::U)
+				{
+					undo(t1, t2, t3, t4, t5, t6, t7, d, p, moves,score,undoStack1, undoStack2, undoStack3, undoStack4, undoStack5, undoStack6, undoStack7);
+				}
             }
 
             if (evnt.type == sf::Event::MouseButtonReleased)
@@ -609,11 +771,11 @@ int main()
                             //t2.reform();
                             reform_selector(t1, t2, t3, t4, t5, t6, t7, foundation_selector);
                             d.remove_card();
-							score++;
-							if (x == 1) {
+                            score++;
+                            if (x == 1) {
                                 moves += 10;
-								x = 0;
-							}
+                                x = 0;
+                            }
                             //}
                         //}
                         }
@@ -624,7 +786,7 @@ int main()
                             //t2.reform();
                             reform_selector(t1, t2, t3, t4, t5, t6, t7, foundation_selector);
                             d.remove_card();
-							score++;
+                            score++;
                             if (x == 1) {
                                 moves += 10;
                                 x = 0;
@@ -638,7 +800,7 @@ int main()
                             //t2.reform();
                             reform_selector(t1, t2, t3, t4, t5, t6, t7, foundation_selector);
                             d.remove_card();
-							score++;
+                            score++;
                             if (x == 1) {
                                 moves += 10;
                                 x = 0;
@@ -664,7 +826,7 @@ int main()
                             //t2.reform();
                             reform_selector(t1, t2, t3, t4, t5, t6, t7, foundation_selector);
                             d.remove_card();
-							score++;
+                            score++;
                             if (x == 1) {
                                 moves += 10;
                                 x = 0;
@@ -677,7 +839,7 @@ int main()
                             //t2.reform();
                             reform_selector(t1, t2, t3, t4, t5, t6, t7, foundation_selector);
                             d.remove_card();
-							score++;
+                            score++;
                             if (x == 1) {
                                 moves += 10;
                                 x = 0;
@@ -690,7 +852,7 @@ int main()
                             //t2.reform();
                             reform_selector(t1, t2, t3, t4, t5, t6, t7, foundation_selector);
                             d.remove_card();
-							score++;
+                            score++;
                             if (x == 1) {
                                 moves += 10;
                                 x = 0;
@@ -699,33 +861,33 @@ int main()
                         }
                         //
                         else if (mousePosition.x > 2300 && mousePosition.x < 2448 && mousePosition.y>140 && mousePosition.y < 320 && d1.check_valid_move(d.get_top_card())) {
-							d1.add_card(d.get_top_card());
-							reform_selector(t1, t2, t3, t4, t5, t6, t7, foundation_selector);
-							d.remove_card();
+                            d1.add_card(d.get_top_card());
+                            reform_selector(t1, t2, t3, t4, t5, t6, t7, foundation_selector);
+                            d.remove_card();
                             score++;
                             moves += 10;
                         }
                         else if (mousePosition.x > 2300 && mousePosition.x < 2448 && mousePosition.y>410 && mousePosition.y < 590 && d2.check_valid_move(d.get_top_card())) {
-							d2.add_card(d.get_top_card());
-							reform_selector(t1, t2, t3, t4, t5, t6, t7, foundation_selector);
+                            d2.add_card(d.get_top_card());
+                            reform_selector(t1, t2, t3, t4, t5, t6, t7, foundation_selector);
                             d.remove_card();
-							score++;
+                            score++;
                             moves += 10;
                         }
                         else if (mousePosition.x > 2300 && mousePosition.x < 2448 && mousePosition.y>680 && mousePosition.y < 860 && d3.check_valid_move(d.get_top_card())) {
                             d3.add_card(d.get_top_card());
                             reform_selector(t1, t2, t3, t4, t5, t6, t7, foundation_selector);
                             d.remove_card();
-							score++;
-							moves += 10;
+                            score++;
+                            moves += 10;
                         }
-						else if (mousePosition.x > 2300 && mousePosition.x < 2448 && mousePosition.y>950 && mousePosition.y < 1130 && d4.check_valid_move(d.get_top_card())) {
-							d4.add_card(d.get_top_card());
-							reform_selector(t1, t2, t3, t4, t5, t6, t7, foundation_selector);
-							d.remove_card();
-							score++;
-							moves += 10;
-						}
+                        else if (mousePosition.x > 2300 && mousePosition.x < 2448 && mousePosition.y>950 && mousePosition.y < 1130 && d4.check_valid_move(d.get_top_card())) {
+                            d4.add_card(d.get_top_card());
+                            reform_selector(t1, t2, t3, t4, t5, t6, t7, foundation_selector);
+                            d.remove_card();
+                            score++;
+                            moves += 10;
+                        }
                         //
                         else {
                             //t2.add_card_flipped(d.get_top_card());
@@ -735,7 +897,7 @@ int main()
                                 //t2.add_card_flipped(temp);
                             }
                             if (selector == 1) {
-								p.add_card(temp);
+                                p.add_card(temp);
                                 selector == 0;
                             }
                             d.remove_card();
@@ -762,70 +924,70 @@ int main()
                     if (d.get_top_card() != nullptr) {
                         if (mousePositionRS.x > 650 && mousePositionRS.x < 798 && mousePositionRS.y>140 && mousePositionRS.y < 450 && (t1.move_valid(d.get_top_card()))) {
                             while (d.get_top_card() != nullptr) {
-								t1.add_card_flipped(d.get_top_card());
-								reform_selector(t1, t2, t3, t4, t5, t6, t7, foundation_selector);
-								d.remove_card();
-								score++;
-							}
+                                t1.add_card_flipped(d.get_top_card());
+                                reform_selector(t1, t2, t3, t4, t5, t6, t7, foundation_selector);
+                                d.remove_card();
+                                score++;
+                            }
                         }
-                        else if (mousePositionRS.x > 650 && mousePositionRS.x < 798 && mousePositionRS.y>140 && mousePositionRS.y < 450 && (t2.move_valid(d.get_top_card()))) {        
+                        else if (mousePositionRS.x > 650 && mousePositionRS.x < 798 && mousePositionRS.y>140 && mousePositionRS.y < 450 && (t2.move_valid(d.get_top_card()))) {
                             while (d.get_top_card() != nullptr) {
                                 t2.add_card_flipped(d.get_top_card());
-								reform_selector(t1, t2, t3, t4, t5, t6, t7, foundation_selector);
+                                reform_selector(t1, t2, t3, t4, t5, t6, t7, foundation_selector);
                                 d.remove_card();
-								score++;
-                            }
-						}
-						else if (mousePositionRS.x > 900 && mousePositionRS.x < 1048 && mousePositionRS.y>140 && mousePositionRS.y < 450 && (t3.move_valid(d.get_top_card()))) {
-							while (d.get_top_card() != nullptr) {
-								t3.add_card_flipped(d.get_top_card());
-								reform_selector(t1, t2, t3, t4, t5, t6, t7, foundation_selector);
-								d.remove_card();
-								score++;
-							}
-						}
-						else if (mousePositionRS.x > 1150 && mousePositionRS.x < 1298 && mousePositionRS.y>140 && mousePositionRS.y < 450 && (t4.move_valid(d.get_top_card()))) {
-							while (d.get_top_card() != nullptr) {
-								t4.add_card_flipped(d.get_top_card());
-								reform_selector(t1, t2, t3, t4, t5, t6, t7, foundation_selector);
-								d.remove_card();
-								score++;
-							}
-						}
-						else if (mousePositionRS.x > 1400 && mousePositionRS.x < 1548 && mousePositionRS.y>140 && mousePositionRS.y < 450 && (t5.move_valid(d.get_top_card()))) {
-							while (d.get_top_card() != nullptr) {
-								t5.add_card_flipped(d.get_top_card());
-								reform_selector(t1, t2, t3, t4, t5, t6, t7, foundation_selector);
-								d.remove_card();
-								score++;
-							}
-						}
-						else if (mousePositionRS.x > 1650 && mousePositionRS.x < 1798 && mousePositionRS.y>140 && mousePositionRS.y < 450 && (t6.move_valid(d.get_top_card()))) {
-							while (d.get_top_card() != nullptr) {
-								t6.add_card_flipped(d.get_top_card());
-								reform_selector(t1, t2, t3, t4, t5, t6, t7, foundation_selector);
-								d.remove_card();
                                 score++;
-							}
-						}
-						else if (mousePositionRS.x > 1900 && mousePositionRS.x < 2048 && mousePositionRS.y>140 && mousePositionRS.y < 450 && (t7.move_valid(d.get_top_card()))) {
-							while (d.get_top_card() != nullptr) {
-								t7.add_card_flipped(d.get_top_card());
-								reform_selector(t1, t2, t3, t4, t5, t6, t7, foundation_selector);
-								d.remove_card();
-								score++;
-							}
-						}
-                        else {
-							while (d.get_top_card() != nullptr) {
-								cards* temp = d.get_top_card();
-								if (temp != nullptr) {
-									cardReversal(t1, t2, t3, t4, t5, t6, t7, foundation_selector, temp);
-								}
-								d.remove_card();
-							}
+                            }
                         }
-						foundation_selector = 0;
+                        else if (mousePositionRS.x > 900 && mousePositionRS.x < 1048 && mousePositionRS.y>140 && mousePositionRS.y < 450 && (t3.move_valid(d.get_top_card()))) {
+                            while (d.get_top_card() != nullptr) {
+                                t3.add_card_flipped(d.get_top_card());
+                                reform_selector(t1, t2, t3, t4, t5, t6, t7, foundation_selector);
+                                d.remove_card();
+                                score++;
+                            }
+                        }
+                        else if (mousePositionRS.x > 1150 && mousePositionRS.x < 1298 && mousePositionRS.y>140 && mousePositionRS.y < 450 && (t4.move_valid(d.get_top_card()))) {
+                            while (d.get_top_card() != nullptr) {
+                                t4.add_card_flipped(d.get_top_card());
+                                reform_selector(t1, t2, t3, t4, t5, t6, t7, foundation_selector);
+                                d.remove_card();
+                                score++;
+                            }
+                        }
+                        else if (mousePositionRS.x > 1400 && mousePositionRS.x < 1548 && mousePositionRS.y>140 && mousePositionRS.y < 450 && (t5.move_valid(d.get_top_card()))) {
+                            while (d.get_top_card() != nullptr) {
+                                t5.add_card_flipped(d.get_top_card());
+                                reform_selector(t1, t2, t3, t4, t5, t6, t7, foundation_selector);
+                                d.remove_card();
+                                score++;
+                            }
+                        }
+                        else if (mousePositionRS.x > 1650 && mousePositionRS.x < 1798 && mousePositionRS.y>140 && mousePositionRS.y < 450 && (t6.move_valid(d.get_top_card()))) {
+                            while (d.get_top_card() != nullptr) {
+                                t6.add_card_flipped(d.get_top_card());
+                                reform_selector(t1, t2, t3, t4, t5, t6, t7, foundation_selector);
+                                d.remove_card();
+                                score++;
+                            }
+                        }
+                        else if (mousePositionRS.x > 1900 && mousePositionRS.x < 2048 && mousePositionRS.y>140 && mousePositionRS.y < 450 && (t7.move_valid(d.get_top_card()))) {
+                            while (d.get_top_card() != nullptr) {
+                                t7.add_card_flipped(d.get_top_card());
+                                reform_selector(t1, t2, t3, t4, t5, t6, t7, foundation_selector);
+                                d.remove_card();
+                                score++;
+                            }
+                        }
+                        else {
+                            while (d.get_top_card() != nullptr) {
+                                cards* temp = d.get_top_card();
+                                if (temp != nullptr) {
+                                    cardReversal(t1, t2, t3, t4, t5, t6, t7, foundation_selector, temp);
+                                }
+                                d.remove_card();
+                            }
+                        }
+                        foundation_selector = 0;
                     }
                 }
 
@@ -861,6 +1023,13 @@ int main()
             window.draw(clockTimer);
             window.draw(movesText);
             window.draw(scoreText);
+            a1->draw(window);
+            a2->draw(window);
+            a3->draw(window);
+            a4->draw(window);
+            a5->draw(window);
+            a6->draw(window);
+            a7->draw(window);
             t1.draw(window);
             t2.draw(window);
             t3.draw(window);
@@ -868,14 +1037,19 @@ int main()
             t5.draw(window);
             t6.draw(window);
             t7.draw(window);
+            window.draw(CD);
+            window.draw(CD2);
+            window.draw(CD3);
+            window.draw(CD4);
             d1.draw(window);
             d2.draw(window);
             d3.draw(window);
             d4.draw(window);
-			td->draw(window);
-			t->draw(window);
-            d.draw(window);
-			p.draw(window);
+			
+            td->draw(window);
+            t->draw(window);
+            d.draw2(window);
+            p.draw(window);
             //window.draw(Card);
             //d.display(window);
             //c.draw(window);
@@ -884,6 +1058,9 @@ int main()
         //c.display(window);
         window.display();
     }
+
+    return 0;
+}
 
     return 0;
 }
