@@ -11,8 +11,8 @@ private:
 	int xpos;
 	int ypos;
 public:
-	tableau(string a, int xpos, int ypos,string b) {
-	    cards* c = new cards(0,a, "textures/empty.png", b);
+	tableau(string a, int xpos, int ypos, string b) {
+		cards* c = new cards(0, a, "textures/empty.png", b);
 		c->set_position(xpos, ypos);
 		c->set_flipped(true);
 		f.push(c);
