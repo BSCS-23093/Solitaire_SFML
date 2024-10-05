@@ -30,8 +30,8 @@ public:
 		if (f.empty())
 			return nullptr;
 		else
-		    return f.front();
-			//return (f.back());
+			return f.front();
+		//return (f.back());
 	}
 	cards* get_last_card() {
 		if (f.empty())
@@ -54,8 +54,8 @@ public:
 		if (f.size() < 3) {
 			int k = 0;
 			//for (int i = f.size(); i >= 0; i--) {
-			for (int i = 0; i < f.size(); i++){
-			f[i]->set_position(xpos, ypos + (20 * k));
+			for (int i = 0; i < f.size(); i++) {
+				f[i]->set_position(xpos, ypos + (20 * k));
 				f[i]->draw(window);
 				k++;
 			}
