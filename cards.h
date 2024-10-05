@@ -27,6 +27,7 @@ public:
 		load(path);
 		set_sprite();
 	}
+	
 	/*
 	void display(RenderWindow& window) {
 		if (flipped) {
